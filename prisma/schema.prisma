@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Master data from Excel
+model BCMasterData {
+  id         Int      @id @default(autoincrement())
+  bcCode     String   @unique @map("bc_code")
+  name       String
+  address    String?
+  city       String?
+  state      String?
+  mobile     String?
+  altMobile  String?  @map("alt_mobile")
+  village    String?
+  taluka     String?
+  district   String?
+  pincode    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("bc_master_data")
+  @@index([bcCode])
+}
+
+// Dispatch entries
+model DispatchEntry {
+  id                  Int      @id @default(autoincrement())
+  ticketId            String?  @map("ticket_id")
+  bcCode              String   @map("bc_code")
+  name                String
+  address             String?
+  city                String?
+  state               String?
+  mobile              String?
+  altMobile           String?  @map("alt_mobile")
+  village             String?
+  taluka              String?
+  district            String?
+  pincode             String?
+  dispatchBy          String?  @map("dispatch_by")
+  dispatchWith        String?  @map("dispatch_with")
+  dispatchNumber      String?  @map("dispatch_number")
+  dispatchLink        String?  @map("dispatch_link")
+  estimateDelivery    DateTime? @map("estimate_delivery_date")
+  itemNames           String?  @map("item_names")
+  timestamp           DateTime @default(now())
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("dispatch_entries")
+  @@index([bcCode])
+  @@index([createdAt])
+}
